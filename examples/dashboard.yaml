@@ -6,13 +6,11 @@ cards:
     title: EV charging
     show_header_toggle: false
     entities:
-      - entity: sensor.halo_charger_status_connector
+      - entity: sensor.halo_charger_connector_1_status_connector
         name: Charger status
-      - entity: sensor.halo_charger_power_active_import
-        name: Charging power
-      - entity: sensor.halo_charger_energy_session
+      - entity: sensor.halo_charger_connector_1_energy_session
         name: Current session
-      - entity: number.halo_charger_maximum_current
+      - entity: number.halo_charger_connector_1_maximum_current
         name: Maximum current
       - entity: binary_sensor.halo_charger_charge_control_schedule_active
         name: Elpris schedule
@@ -36,7 +34,7 @@ cards:
     stat_types:
       - change
     entities:
-      - entity: sensor.halo_charger_energy_active_import_register
+      - entity: sensor.halo_charger_connector_1_energy_active_import_register
         name: Charged energy
 
   - type: statistics-graph
@@ -47,5 +45,5 @@ cards:
     stat_types:
       - change
     entities:
-      - entity: sensor.halo_charger_energy_active_import_register
+      - entity: sensor.halo_charger_connector_1_energy_active_import_register
         name: Charged energy
