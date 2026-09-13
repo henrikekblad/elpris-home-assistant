@@ -4,7 +4,8 @@
 
 Home Assistant integration for receiving and executing EV charging schedules from the [Elpris Android app](https://github.com/henrikekblad/elpris).
 
-> The integration is under active development and has not yet had a stable release.
+> The integration is under active development. Home Assistant executes the
+> schedules and controls the charger through the selected entities.
 
 ## Features
 
@@ -27,6 +28,12 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 6. Select the charger and its charge-control switch. Select a current-limit number entity if available.
 
 The integration creates schedule sensors and start, stop and cancel buttons. No helper entities or automation blueprint are required.
+
+The scheduled start and end sensors expose the complete non-secret plan as
+attributes: `periods`, `amps`, `phases`, `power_kw`, `energy_kwh`, `price_area`,
+and `estimated`. These can be used to visualize every charging period in a Home
+Assistant or Node-RED dashboard. Pairing secrets remain confined to the separate
+*App connection* sensor.
 
 ## Connect the Android app
 
@@ -62,7 +69,9 @@ The webhook ID is a secret. Do not publish the complete webhook URL, screenshots
 
 ## Current scope
 
-The first version controls standard Home Assistant switch and number entities. Native OCPP Smart Charging profiles are planned after the generic scheduling path has been verified with real chargers.
+The current scheduler runs in Home Assistant and controls standard switch and
+number entities, including those exposed by OCPP. Native OCPP Smart Charging
+profiles stored directly in compatible chargers are planned as an optional mode.
 
 ## License
 

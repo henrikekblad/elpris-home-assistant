@@ -1,6 +1,7 @@
 """Schedule and connection sensors for Elpris charging control."""
 
 from datetime import datetime
+from typing import Any
 from urllib.parse import urlencode
 
 from homeassistant.components import webhook
@@ -83,3 +84,20 @@ class PlanTimeEntity(ElprisChargingEntity, SensorEntity):
             if self._point == "start"
             else self.controller.plan.end_time
         )
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Expose the complete, non-secret charging plan for dashboards."""
+        plan = self.controller.plan
+        if plan is None:
+            return None
+        periods = plan.periods or [{"start": plan.start, "end": plan.end}]
+        return {
+            "periods": periods,
+            "amps": plan.amps,
+            "phases": plan.phases,
+            "power_kw": plan.power_kw,
+            "energy_kwh": plan.energy_kwh,
+            "price_area": plan.price_area,
+            "estimated": plan.estimated,
+        }
