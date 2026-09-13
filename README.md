@@ -8,7 +8,7 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 
 ## Features
 
-- Stores schedules in Home Assistant, independently of the Android phone.
+- Stores schedules with up to eight charging periods in Home Assistant, independently of the Android phone.
 - Starts and stops charging at the calculated times.
 - Optionally applies a charging-current limit before starting.
 - Restores future and active schedules after a Home Assistant restart.

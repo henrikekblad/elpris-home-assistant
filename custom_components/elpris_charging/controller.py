@@ -32,6 +32,7 @@ class ChargingPlan:
     energy_kwh: float | None = None
     price_area: str | None = None
     estimated: bool = False
+    periods: list[dict[str, str]] | None = None
 
     @property
     def start_time(self) -> datetime:
@@ -40,6 +41,12 @@ class ChargingPlan:
     @property
     def end_time(self) -> datetime:
         return _parse_datetime(self.end)
+
+    @property
+    def windows(self) -> list[tuple[datetime, datetime]]:
+        if not self.periods:
+            return [(self.start_time, self.end_time)]
+        return [(_parse_datetime(item["start"]), _parse_datetime(item["end"])) for item in self.periods]
 
 
 def _parse_datetime(value: str) -> datetime:
@@ -61,8 +68,7 @@ class ChargingController:
         self._store: Store[dict[str, Any]] = Store(
             hass, STORE_VERSION, f"{DOMAIN}.{entry_id}"
         )
-        self._start_cancel: Callable[[], None] | None = None
-        self._end_cancel: Callable[[], None] | None = None
+        self._timer_cancels: list[Callable[[], None]] = []
         self._listeners: set[Callable[[], None]] = set()
 
     async def async_initialize(self) -> None:
@@ -77,18 +83,28 @@ class ChargingController:
 
     async def async_schedule(self, payload: dict[str, Any]) -> None:
         """Validate, store and activate a new charging schedule."""
+        periods = payload.get("periods") or [{"start": payload["start"], "end": payload["end"]}]
+        if not isinstance(periods, list) or not 1 <= len(periods) <= 8:
+            raise ValueError("Schedule must contain between one and eight periods")
+        normalized_periods = [{"start": str(item["start"]), "end": str(item["end"])} for item in periods]
         plan = ChargingPlan(
-            start=str(payload["start"]),
-            end=str(payload["end"]),
+            start=normalized_periods[0]["start"],
+            end=normalized_periods[-1]["end"],
             amps=int(payload["amps"]),
             phases=int(payload.get("phases", 3)),
             power_kw=_optional_float(payload.get("power_kw")),
             energy_kwh=_optional_float(payload.get("energy_kwh")),
             price_area=payload.get("price_area"),
             estimated=bool(payload.get("estimated", False)),
+            periods=normalized_periods,
         )
-        if plan.end_time <= plan.start_time:
-            raise ValueError("End time must be after start time")
+        previous_end: datetime | None = None
+        for start, end in plan.windows:
+            if end <= start:
+                raise ValueError("Period end must be after its start")
+            if previous_end is not None and start < previous_end:
+                raise ValueError("Charging periods must be ordered and must not overlap")
+            previous_end = end
         if plan.end_time <= dt_util.utcnow():
             raise ValueError("End time must be in the future")
         if plan.end_time > dt_util.utcnow() + timedelta(days=7):
@@ -172,36 +188,38 @@ class ChargingController:
         if self.plan is None:
             return
         now = dt_util.utcnow()
-        if now >= self.plan.end_time:
+        windows = self.plan.windows
+        if now >= windows[-1][1]:
             await self.async_stop(clear_schedule=True)
             return
-        if now >= self.plan.start_time:
+        active = any(start <= now < end for start, end in windows)
+        if active:
             await self.async_start()
         else:
             await self.async_stop(clear_schedule=False)
-            self._start_cancel = async_track_point_in_utc_time(
-                self.hass, self._async_start_callback, self.plan.start_time
-            )
-        self._end_cancel = async_track_point_in_utc_time(
-            self.hass, self._async_end_callback, self.plan.end_time
-        )
+        for index, (start, end) in enumerate(windows):
+            if start > now:
+                self._timer_cancels.append(async_track_point_in_utc_time(
+                    self.hass, self._async_start_callback, start
+                ))
+            if end > now:
+                final = index == len(windows) - 1
+                self._timer_cancels.append(async_track_point_in_utc_time(
+                    self.hass, lambda event_time, is_final=final: self._async_end_callback(event_time, is_final), end
+                ))
 
     @callback
     def _async_start_callback(self, _now: datetime) -> None:
-        self._start_cancel = None
         self.hass.async_create_task(self.async_start())
 
     @callback
-    def _async_end_callback(self, _now: datetime) -> None:
-        self._end_cancel = None
-        self.hass.async_create_task(self.async_stop(clear_schedule=True))
+    def _async_end_callback(self, _now: datetime, final: bool) -> None:
+        self.hass.async_create_task(self.async_stop(clear_schedule=final))
 
     def _cancel_timers(self) -> None:
-        for cancel in (self._start_cancel, self._end_cancel):
-            if cancel:
-                cancel()
-        self._start_cancel = None
-        self._end_cancel = None
+        for cancel in self._timer_cancels:
+            cancel()
+        self._timer_cancels.clear()
 
 
 def _optional_float(value: Any) -> float | None:

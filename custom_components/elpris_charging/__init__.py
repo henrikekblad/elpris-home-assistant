@@ -40,6 +40,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                         "start": plan.start if plan else None,
                         "end": plan.end if plan else None,
                         "amps": plan.amps if plan else None,
+                        "periods": plan.periods if plan else None,
                     }
                 )
             if action == "schedule":
