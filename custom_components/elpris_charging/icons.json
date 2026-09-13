@@ -4,6 +4,7 @@
     "button": {
       "start": {"default": "mdi:play"},
       "stop": {"default": "mdi:stop"},
+      "follow": {"default": "mdi:calendar-sync"},
       "cancel": {"default": "mdi:calendar-remove"}
     },
     "sensor": {

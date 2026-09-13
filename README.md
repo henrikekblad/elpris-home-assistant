@@ -13,7 +13,7 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 - Starts and stops charging at the calculated times.
 - Optionally applies a charging-current limit before starting.
 - Restores future and active schedules after a Home Assistant restart.
-- Provides start, stop and cancel buttons plus schedule-status entities.
+- Provides start, stop, follow-schedule and cancel buttons plus schedule-status entities.
 - Generates a private, narrowly scoped webhook instead of requiring a Home Assistant access token in the app.
 - Guided OCPP setup that first selects a charger and then shows only its compatible controls.
 - Generic mode for other chargers that expose a Home Assistant switch and optional number entity.
@@ -27,7 +27,7 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 5. Choose **OCPP charger** for the guided setup, or **Generic Home Assistant charger** for any charger exposing a control switch.
 6. Select the charger and its charge-control switch. Select a current-limit number entity if available.
 
-The integration creates schedule sensors and start, stop and cancel buttons. No helper entities or automation blueprint are required.
+The integration creates schedule sensors and start, stop, follow-schedule and cancel buttons. **Follow charging schedule** immediately restores the state required by the saved plan: charging inside a configured period and stopped while waiting for the next one. No helper entities or automation blueprint are required.
 
 The scheduled start and end sensors expose the complete non-secret plan as
 attributes: `periods`, `amps`, `phases`, `power_kw`, `energy_kwh`, `price_area`,

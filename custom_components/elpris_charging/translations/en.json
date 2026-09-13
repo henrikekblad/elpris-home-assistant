@@ -48,6 +48,7 @@
     "button": {
       "start": {"name": "Start charging"},
       "stop": {"name": "Stop charging"},
+      "follow": {"name": "Follow charging schedule"},
       "cancel": {"name": "Cancel schedule"}
     },
     "sensor": {

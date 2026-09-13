@@ -10,6 +10,7 @@ from typing import Any
 
 from homeassistant.const import STATE_ON
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.event import async_track_point_in_utc_time
 from homeassistant.helpers.storage import Store
 from homeassistant.util import dt as dt_util
@@ -118,6 +119,12 @@ class ChargingController:
     async def async_cancel(self) -> None:
         """Stop charging and remove the active schedule."""
         await self.async_stop(clear_schedule=True)
+
+    async def async_follow_schedule(self) -> None:
+        """Immediately restore the charger state required by the saved plan."""
+        if self.plan is None:
+            raise HomeAssistantError("No charging schedule is active")
+        await self._async_reschedule()
 
     async def async_start(self, amps: int | None = None) -> None:
         """Apply the requested current and start charging."""

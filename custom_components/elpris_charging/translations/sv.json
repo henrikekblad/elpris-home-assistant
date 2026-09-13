@@ -48,6 +48,7 @@
     "button": {
       "start": {"name": "Starta laddning"},
       "stop": {"name": "Stoppa laddning"},
+      "follow": {"name": "Följ laddschema"},
       "cancel": {"name": "Avbryt laddschema"}
     },
     "sensor": {
