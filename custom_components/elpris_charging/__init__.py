@@ -29,6 +29,19 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             if payload.get("version") != 1:
                 raise ValueError("Unsupported payload version")
             action = payload.get("action")
+            if action == "status":
+                plan = controller.plan
+                return web.json_response(
+                    {
+                        "ok": True,
+                        "action": action,
+                        "charging_enabled": controller.charging,
+                        "schedule_active": plan is not None,
+                        "start": plan.start if plan else None,
+                        "end": plan.end if plan else None,
+                        "amps": plan.amps if plan else None,
+                    }
+                )
             if action == "schedule":
                 await controller.async_schedule(payload)
             elif action == "cancel":
@@ -70,4 +83,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     controller: ChargingController = hass.data[DOMAIN].pop(entry.entry_id)
     await controller.async_shutdown()
     return True
-

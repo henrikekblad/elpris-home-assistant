@@ -96,7 +96,6 @@ class ChargingController:
         self._validate_amps(plan.amps)
         self.plan = plan
         await self._async_save()
-        await self.async_stop(clear_schedule=False)
         await self._async_reschedule()
         self._notify()
 
@@ -116,16 +115,18 @@ class ChargingController:
                     {"entity_id": self.current_limit, "value": requested_amps},
                     blocking=True,
                 )
-        await self.hass.services.async_call(
-            "switch", "turn_on", {"entity_id": self.charge_control}, blocking=True
-        )
+        if not self.charging:
+            await self.hass.services.async_call(
+                "switch", "turn_on", {"entity_id": self.charge_control}, blocking=True
+            )
         self._notify()
 
     async def async_stop(self, *, clear_schedule: bool = False) -> None:
         """Stop charging, optionally removing the saved schedule."""
-        await self.hass.services.async_call(
-            "switch", "turn_off", {"entity_id": self.charge_control}, blocking=True
-        )
+        if self.charging:
+            await self.hass.services.async_call(
+                "switch", "turn_off", {"entity_id": self.charge_control}, blocking=True
+            )
         if clear_schedule:
             self.plan = None
             self._cancel_timers()
