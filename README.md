@@ -34,10 +34,10 @@ The integration creates schedule sensors and start, stop and cancel buttons. No 
 2. Search for **App connection** on the Elpris charging-control device.
 3. Open the entity and display its attributes. Copy `webhook_id`.
 4. In Elpris, open **Settings → Home Assistant**.
-5. Enter the externally reachable HTTPS address of Home Assistant and paste the private webhook ID.
+5. Enter the Home Assistant address and paste the private webhook ID. Use HTTPS for internet addresses; a private local IP address or local hostname may use HTTP.
 6. Tap **Test connection**.
 
-`webhook_id` is a generated secret for this integration, not a Home Assistant password or long-lived access token. Automatic pairing through the `pairing_uri` attribute is experimental and requires Home Assistant to have a correct external HTTPS URL configured.
+`webhook_id` is a generated secret for this integration, not a Home Assistant password or long-lived access token. Automatic pairing through the `pairing_uri` attribute is experimental and works with either a configured external HTTPS URL or a private local HTTP address.
 
 In the **EV** tab, **Start now** first applies the amperage currently selected in Elpris and then enables charging. **Send charging schedule** transfers all calculated periods and the selected amperage. The button indicates whether the calculated schedule is synchronized with Home Assistant or needs updating.
 
@@ -58,7 +58,7 @@ The webhook ID is a secret. Do not publish the complete webhook URL, screenshots
 - If OCPP entities are unavailable after a Home Assistant restart, allow the charger time to reconnect.
 - Chargers with several connectors may expose connector-specific entities. Select the main charging outlet, commonly connector 1, under the integration's **Configure** action.
 - A rejected OCPP remote start or stop can mean there is no active transaction or that the connected vehicle is not requesting energy.
-- The Android connection test requires an externally reachable HTTPS URL.
+- Internet-facing addresses require HTTPS. Plain HTTP is accepted only for private local addresses and hostnames, and works only while the phone can reach that network.
 
 ## Current scope
 
