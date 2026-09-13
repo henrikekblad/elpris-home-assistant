@@ -132,7 +132,7 @@ class ElprisChargingConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             and entry.platform == "ocpp"
             and entry.disabled_by is None
             and self.hass.states.get(entry.entity_id) is not None
-            and self.hass.states[entry.entity_id].attributes.get("unit_of_measurement") == "A"
+            and self.hass.states.get(entry.entity_id).attributes.get("unit_of_measurement") == "A"
         )
         return switches, numbers
 
