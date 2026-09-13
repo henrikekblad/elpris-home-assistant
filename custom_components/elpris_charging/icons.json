@@ -1,0 +1,15 @@
+{
+  "entity": {
+    "binary_sensor": {"schedule_active": {"default": "mdi:calendar-clock"}},
+    "button": {
+      "start": {"default": "mdi:play"},
+      "stop": {"default": "mdi:stop"},
+      "cancel": {"default": "mdi:calendar-remove"}
+    },
+    "sensor": {
+      "connection": {"default": "mdi:home-assistant"},
+      "plan_start": {"default": "mdi:clock-start"},
+      "plan_end": {"default": "mdi:clock-end"}
+    }
+  }
+}
