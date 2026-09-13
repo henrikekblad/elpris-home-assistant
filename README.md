@@ -19,13 +19,31 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 
 ## Installation
 
-The HACS installation flow will become available with the first release. During development, copy `custom_components/elpris_charging` into the `custom_components` directory of your Home Assistant configuration and restart Home Assistant.
+1. Open this repository in HACS with the button above and choose **Download**.
+2. Restart Home Assistant when HACS asks you to.
+3. Open **Settings → Devices & services → Add integration**.
+4. Search for **Elpris charging control**.
+5. Choose **OCPP charger** for the guided setup, or **Generic Home Assistant charger** for any charger exposing a control switch.
+6. Select the charger and its charge-control switch. Select a current-limit number entity if available.
 
-Then open **Settings → Devices & services → Add integration**, search for **Elpris charging control**, and follow the setup flow. The *App connection* sensor contains the Home Assistant URL, private webhook ID and a pairing URI for the Android app.
+The integration creates schedule sensors and start, stop and cancel buttons. No helper entities or automation blueprint are required.
+
+## Connect the Android app
+
+1. Open **Settings → Devices & services → Entities** in Home Assistant.
+2. Search for **App connection** on the Elpris charging-control device.
+3. Open the entity and display its attributes. Copy `webhook_id`.
+4. In Elpris, open **Settings → Home Assistant**.
+5. Enter the externally reachable HTTPS address of Home Assistant and paste the private webhook ID.
+6. Tap **Test connection**.
+
+`webhook_id` is a generated secret for this integration, not a Home Assistant password or long-lived access token. Automatic pairing through the `pairing_uri` attribute is experimental and requires Home Assistant to have a correct external HTTPS URL configured.
+
+In the **EV** tab, **Start now** first applies the amperage currently selected in Elpris and then enables charging. **Send charging schedule** transfers all calculated periods and the selected amperage. The button indicates whether the calculated schedule is synchronized with Home Assistant or needs updating.
 
 ## Dashboard
 
-[`examples/dashboard.yaml`](examples/dashboard.yaml) is a ready-made dashboard section using only built-in Home Assistant cards. It shows charger state, power, the active Elpris schedule, manual controls, daily energy for the current month and monthly energy for the last year.
+[`examples/dashboard.yaml`](examples/dashboard.yaml) is a ready-made dashboard section using only built-in Home Assistant cards. It shows charger state, session energy, the active Elpris schedule, manual controls, daily energy for the current month and monthly energy for the last year.
 
 Paste the example into a manual dashboard card and replace the example OCPP entity IDs with those of your charger. The energy graph needs a cumulative energy sensor with `device_class: energy` and `state_class: total_increasing`; Home Assistant then calculates consumption from its long-term statistics. The integration does not modify dashboards automatically.
 
@@ -33,7 +51,14 @@ Paste the example into a manual dashboard card and replace the example OCPP enti
 
 The webhook accepts only versioned Elpris commands for status, scheduling, cancellation, start and stop. The status response contains only this integration's charger-control and schedule state. Timestamps and charging current are validated before the selected Home Assistant entities are called. The Android app does not store a Home Assistant username, password or general access token.
 
-The webhook ID is a secret. Do not publish the complete webhook URL or the attributes of the *App connection* sensor. Reinstalling the integration generates a new webhook ID.
+The webhook ID is a secret. Do not publish the complete webhook URL, screenshots of the ID, or the attributes of the *App connection* sensor. Removing and adding the integration again generates a new webhook ID.
+
+## Troubleshooting
+
+- If OCPP entities are unavailable after a Home Assistant restart, allow the charger time to reconnect.
+- Chargers with several connectors may expose connector-specific entities. Select the main charging outlet, commonly connector 1, under the integration's **Configure** action.
+- A rejected OCPP remote start or stop can mean there is no active transaction or that the connected vehicle is not requesting energy.
+- The Android connection test requires an externally reachable HTTPS URL.
 
 ## Current scope
 
