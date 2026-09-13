@@ -1,6 +1,6 @@
 # Elpris charging control for Home Assistant
 
-[![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=henrikekblad&amp;repository=elpris-home-assistant&amp;category=integration)
+[![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=henrikekblad&repository=elpris-home-assistant&category=integration)
 
 Home Assistant integration for receiving and executing EV charging schedules from the [Elpris Android app](https://github.com/henrikekblad/elpris).
 
