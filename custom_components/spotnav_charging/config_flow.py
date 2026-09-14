@@ -1,4 +1,4 @@
-"""Config flow for Elpris charging control."""
+"""Config flow for SpotNav charging control."""
 
 from __future__ import annotations
 
@@ -22,8 +22,8 @@ from .const import (
 )
 
 
-class ElprisChargingConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Configure Elpris charging control."""
+class SpotNavChargingConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    """Configure SpotNav charging control."""
 
     VERSION = 1
 
@@ -147,10 +147,10 @@ class ElprisChargingConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: config_entries.ConfigEntry):
-        return ElprisChargingOptionsFlow(config_entry)
+        return SpotNavChargingOptionsFlow(config_entry)
 
 
-class ElprisChargingOptionsFlow(config_entries.OptionsFlow):
+class SpotNavChargingOptionsFlow(config_entries.OptionsFlow):
     """Edit charger entity choices."""
 
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:

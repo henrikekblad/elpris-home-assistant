@@ -13,7 +13,7 @@ cards:
       - entity: number.halo_charger_connector_1_maximum_current
         name: Maximum current
       - entity: binary_sensor.halo_charger_charge_control_schedule_active
-        name: Elpris schedule
+        name: SpotNav schedule
       - entity: sensor.halo_charger_charge_control_scheduled_start
         name: Scheduled start
       - entity: sensor.halo_charger_charge_control_scheduled_end

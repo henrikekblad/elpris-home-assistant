@@ -1,4 +1,4 @@
-"""Control buttons for Elpris charging control."""
+"""Control buttons for SpotNav charging control."""
 
 from collections.abc import Awaitable, Callable
 
@@ -9,7 +9,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .controller import ChargingController
-from .entity import ElprisChargingEntity
+from .entity import SpotNavChargingEntity
 
 
 async def async_setup_entry(
@@ -26,7 +26,7 @@ async def async_setup_entry(
     )
 
 
-class ControlButton(ElprisChargingEntity, ButtonEntity):
+class ControlButton(SpotNavChargingEntity, ButtonEntity):
     """Run one charger command."""
 
     def __init__(

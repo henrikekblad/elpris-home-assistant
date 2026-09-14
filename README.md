@@ -1,8 +1,8 @@
-# Elpris charging control for Home Assistant
+# SpotNav charging control for Home Assistant
 
-[![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=henrikekblad&repository=elpris-home-assistant&category=integration)
+[![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=henrikekblad&repository=spotnav-home-assistant&category=integration)
 
-Home Assistant integration for receiving and executing EV charging schedules from the [Elpris Android app](https://github.com/henrikekblad/elpris).
+Home Assistant integration for receiving and executing EV charging schedules from the [SpotNav Android app](https://github.com/henrikekblad/spotnav).
 
 > The integration is under active development. Home Assistant executes the
 > schedules and controls the charger through the selected entities.
@@ -23,7 +23,7 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 1. Open this repository in HACS with the button above and choose **Download**.
 2. Restart Home Assistant when HACS asks you to.
 3. Open **Settings → Devices & services → Add integration**.
-4. Search for **Elpris charging control**.
+4. Search for **SpotNav charging control**.
 5. Choose **OCPP charger** for the guided setup, or **Generic Home Assistant charger** for any charger exposing a control switch.
 6. Select the charger and its charge-control switch. Select a current-limit number entity if available.
 
@@ -38,25 +38,25 @@ Assistant or Node-RED dashboard. Pairing secrets remain confined to the separate
 ## Connect the Android app
 
 1. Open **Settings → Devices & services → Entities** in Home Assistant.
-2. Search for **App connection** on the Elpris charging-control device.
+2. Search for **App connection** on the SpotNav charging-control device.
 3. Open the entity and display its attributes. Copy `webhook_id`.
-4. In Elpris, open **Settings → Home Assistant**.
+4. In SpotNav, open **Settings → Home Assistant**.
 5. Enter the Home Assistant address and paste the private webhook ID. Use HTTPS for internet addresses; a private local IP address or local hostname may use HTTP.
 6. Tap **Test connection**.
 
 `webhook_id` is a generated secret for this integration, not a Home Assistant password or long-lived access token. Automatic pairing through the `pairing_uri` attribute is experimental and works with either a configured external HTTPS URL or a private local HTTP address.
 
-In the **EV** tab, **Start now** first applies the amperage currently selected in Elpris and then enables charging. **Send charging schedule** transfers all calculated periods and the selected amperage. The button indicates whether the calculated schedule is synchronized with Home Assistant or needs updating.
+In the **EV** tab, **Start now** first applies the amperage currently selected in SpotNav and then enables charging. **Send charging schedule** transfers all calculated periods and the selected amperage. The button indicates whether the calculated schedule is synchronized with Home Assistant or needs updating.
 
 ## Dashboard
 
-[`examples/dashboard.yaml`](examples/dashboard.yaml) is a ready-made dashboard section using only built-in Home Assistant cards. It shows charger state, session energy, the active Elpris schedule, manual controls, daily energy for the current month and monthly energy for the last year.
+[`examples/dashboard.yaml`](examples/dashboard.yaml) is a ready-made dashboard section using only built-in Home Assistant cards. It shows charger state, session energy, the active SpotNav schedule, manual controls, daily energy for the current month and monthly energy for the last year.
 
 Paste the example into a manual dashboard card and replace the example OCPP entity IDs with those of your charger. The energy graph needs a cumulative energy sensor with `device_class: energy` and `state_class: total_increasing`; Home Assistant then calculates consumption from its long-term statistics. The integration does not modify dashboards automatically.
 
 ## Security
 
-The webhook accepts only versioned Elpris commands for status, scheduling, cancellation, start and stop. The status response contains only this integration's charger-control and schedule state. Timestamps and charging current are validated before the selected Home Assistant entities are called. The Android app does not store a Home Assistant username, password or general access token.
+The webhook accepts only versioned SpotNav commands for status, scheduling, cancellation, start and stop. The status response contains only this integration's charger-control and schedule state. Timestamps and charging current are validated before the selected Home Assistant entities are called. The Android app does not store a Home Assistant username, password or general access token.
 
 The webhook ID is a secret. Do not publish the complete webhook URL, screenshots of the ID, or the attributes of the *App connection* sensor. Removing and adding the integration again generates a new webhook ID.
 

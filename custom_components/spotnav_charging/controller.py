@@ -23,7 +23,7 @@ STORE_VERSION = 1
 
 @dataclass(slots=True)
 class ChargingPlan:
-    """A charging period received from Elpris."""
+    """A charging period received from SpotNav."""
 
     start: str
     end: str
@@ -58,7 +58,7 @@ def _parse_datetime(value: str) -> datetime:
 
 
 class ChargingController:
-    """Control one Home Assistant charger from Elpris commands."""
+    """Control one Home Assistant charger from SpotNav commands."""
 
     def __init__(self, hass: HomeAssistant, entry_id: str, config: dict[str, Any]) -> None:
         self.hass = hass
@@ -79,7 +79,7 @@ class ChargingController:
             try:
                 self.plan = ChargingPlan(**saved["plan"])
             except (TypeError, ValueError):
-                _LOGGER.warning("Discarding invalid saved Elpris charging plan")
+                _LOGGER.warning("Discarding invalid saved SpotNav charging plan")
         await self._async_reschedule()
 
     async def async_schedule(self, payload: dict[str, Any]) -> None:

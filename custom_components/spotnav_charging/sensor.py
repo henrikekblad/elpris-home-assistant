@@ -1,4 +1,4 @@
-"""Schedule and connection sensors for Elpris charging control."""
+"""Schedule and connection sensors for SpotNav charging control."""
 
 from datetime import datetime
 from typing import Any
@@ -13,7 +13,7 @@ from homeassistant.helpers.network import NoURLAvailableError
 
 from .const import CONF_WEBHOOK_ID, DOMAIN
 from .controller import ChargingController
-from .entity import ElprisChargingEntity
+from .entity import SpotNavChargingEntity
 
 
 async def async_setup_entry(
@@ -29,7 +29,7 @@ async def async_setup_entry(
     )
 
 
-class ConnectionEntity(ElprisChargingEntity, SensorEntity):
+class ConnectionEntity(SpotNavChargingEntity, SensorEntity):
     """Expose pairing data to the Home Assistant owner."""
 
     _attr_translation_key = "connection"
@@ -58,11 +58,11 @@ class ConnectionEntity(ElprisChargingEntity, SensorEntity):
             "home_assistant_url": base_url,
             "webhook_id": webhook_id,
             "webhook_url": webhook_url,
-            "pairing_uri": f"elpris://home-assistant?{pairing_query}",
+            "pairing_uri": f"spotnav://home-assistant?{pairing_query}",
         }
 
 
-class PlanTimeEntity(ElprisChargingEntity, SensorEntity):
+class PlanTimeEntity(SpotNavChargingEntity, SensorEntity):
     """Start or end of the current charging plan."""
 
     _attr_device_class = SensorDeviceClass.TIMESTAMP

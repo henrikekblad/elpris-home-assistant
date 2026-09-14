@@ -1,4 +1,4 @@
-"""Binary sensors for Elpris charging control."""
+"""Binary sensors for SpotNav charging control."""
 
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
@@ -7,7 +7,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .controller import ChargingController
-from .entity import ElprisChargingEntity
+from .entity import SpotNavChargingEntity
 
 
 async def async_setup_entry(
@@ -17,8 +17,8 @@ async def async_setup_entry(
     async_add_entities([ScheduleActiveEntity(entry, controller)])
 
 
-class ScheduleActiveEntity(ElprisChargingEntity, BinarySensorEntity):
-    """Whether an Elpris charging schedule is active."""
+class ScheduleActiveEntity(SpotNavChargingEntity, BinarySensorEntity):
+    """Whether a SpotNav charging schedule is active."""
 
     _attr_translation_key = "schedule_active"
 
@@ -29,4 +29,3 @@ class ScheduleActiveEntity(ElprisChargingEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         return self.controller.plan is not None
-

@@ -1,4 +1,4 @@
-"""Elpris charging control integration."""
+"""SpotNav charging control integration."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Elpris charging control from a config entry."""
+    """Set up SpotNav charging control from a config entry."""
     controller = ChargingController(hass, entry.entry_id, dict(entry.data))
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = controller
 
@@ -55,17 +55,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             else:
                 raise ValueError("Unsupported action")
         except (KeyError, TypeError, ValueError) as error:
-            _LOGGER.warning("Rejected Elpris webhook command: %s", error)
+            _LOGGER.warning("Rejected SpotNav webhook command: %s", error)
             return web.json_response({"ok": False, "error": str(error)}, status=400)
         except Exception:
-            _LOGGER.exception("Elpris charger command failed")
+            _LOGGER.exception("SpotNav charger command failed")
             return web.json_response({"ok": False, "error": "Charger command failed"}, status=502)
         return web.json_response({"ok": True, "action": action})
 
     webhook.async_register(
         hass,
         DOMAIN,
-        "Elpris charging control",
+        "SpotNav charging control",
         entry.data[CONF_WEBHOOK_ID],
         async_handle_webhook,
         local_only=False,
@@ -77,7 +77,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload an Elpris charging control entry."""
+    """Unload a SpotNav charging control entry."""
     if not await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         return False
     webhook.async_unregister(hass, entry.data[CONF_WEBHOOK_ID])

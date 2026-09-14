@@ -1,6 +1,6 @@
-"""Constants for Elpris charging control."""
+"""Constants for SpotNav charging control."""
 
-DOMAIN = "elpris_charging"
+DOMAIN = "spotnav_charging"
 CONF_MODE = "mode"
 CONF_CHARGE_CONTROL = "charge_control"
 CONF_CURRENT_LIMIT = "current_limit"
