@@ -1,5 +1,5 @@
 {
-  "domain": "spotnav_charging",
+  "domain": "elpris_charging",
   "name": "SpotNav charging control",
   "after_dependencies": ["ocpp"],
   "codeowners": ["@henrikekblad"],
@@ -10,5 +10,5 @@
   "iot_class": "local_push",
   "issue_tracker": "https://github.com/henrikekblad/spotnav-home-assistant/issues",
   "requirements": [],
-  "version": "0.2.0"
+  "version": "0.2.1"
 }

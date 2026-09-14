@@ -31,6 +31,11 @@ Home Assistant integration for receiving and executing EV charging schedules fro
 5. Choose **OCPP charger** for the guided setup, or **Generic Home Assistant charger** for any charger exposing a control switch.
 6. Select the charger and its charge-control switch. Select a current-limit number entity if available.
 
+Existing installations of Elpris charging control can update directly to
+SpotNav charging control. The technical integration domain remains unchanged so
+the existing configuration, webhook, entities and dashboard or Node-RED
+references are preserved. Do not remove the integration before updating.
+
 The integration creates schedule sensors and start, stop, follow-schedule and cancel buttons. **Follow charging schedule** immediately restores the state required by the saved plan: charging inside a configured period and stopped while waiting for the next one. No helper entities or automation blueprint are required.
 
 The scheduled start and end sensors expose the complete non-secret plan as
