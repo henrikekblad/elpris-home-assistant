@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/spotnav-icon.svg" alt="SpotNav logo" width="120">
+</p>
+
 # SpotNav charging control for Home Assistant
 
 [![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=henrikekblad&repository=spotnav-home-assistant&category=integration)
