@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/spotnav-icon.svg" alt="SpotNav logo" width="120">
+  <img src="https://raw.githubusercontent.com/henrikekblad/spotnav-home-assistant/main/assets/spotnav-icon.svg" alt="SpotNav logo" width="120">
 </p>
 
 # SpotNav charging control for Home Assistant
